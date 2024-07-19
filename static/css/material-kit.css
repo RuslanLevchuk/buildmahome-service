@@ -1674,7 +1674,7 @@ progress {
 
   .col-lg-6 {
     flex: 0 0 auto;
-    width: 50%;
+    width: 40%;
   }
 
   .col-lg-7 {
@@ -10111,8 +10111,8 @@ fieldset:disabled .btn {
 }
 
 .py-9 {
-  padding-top: 10rem !important;
-  padding-bottom: 10rem !important;
+  padding-top: 5rem !important;
+  padding-bottom: 5rem !important;
 }
 
 .py-10 {
@@ -10288,6 +10288,7 @@ fieldset:disabled .btn {
 
 .ps-0 {
   padding-left: 0 !important;
+  width: 60%;
 }
 
 .ps-1 {
@@ -27645,4 +27646,19 @@ pre[class*="language-"] {
 
 .navbar-logo {
   height: 30px;
+}
+
+
+
+.profile-table {
+  width: 100%;
+  border-collapse: collapse;
+
+        }
+.profile-table th, .custom-table td {
+  padding-right: 30px;
+  text-align: left;
+        }
+.profile-table th {
+  background-color: #f2f2f2;
 }
