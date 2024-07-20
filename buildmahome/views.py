@@ -37,3 +37,7 @@ class UserProfileView(generic.DetailView):
         if worker:
             context['skills'] = worker.skills.all()
         return context
+
+
+class UserUpdateView(generic.TemplateView):
+    template_name = "buildmahome/user-profile-update.html"
