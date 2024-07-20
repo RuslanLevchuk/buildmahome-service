@@ -27662,3 +27662,6 @@ pre[class*="language-"] {
 .profile-table th {
   background-color: #f2f2f2;
 }
+.block-content-header {
+  padding-left: 20px;
+}
