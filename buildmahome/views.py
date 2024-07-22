@@ -1,10 +1,10 @@
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import update_session_auth_hash
 from django.http import request
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views import generic
 
-from buildmahome.forms import SignUpForm
+from buildmahome.forms import SignUpForm, UserUpdateForm
 from buildmahome.models import User, Worker
 
 
@@ -39,5 +39,32 @@ class UserProfileView(generic.DetailView):
         return context
 
 
-class UserUpdateView(generic.TemplateView):
+class UserUpdateView(generic.UpdateView):
+    model = User
+    form_class = UserUpdateForm
     template_name = "buildmahome/user-profile-update.html"
+
+    def get_success_url(self):
+        return reverse(
+            "buildmahome:profile",
+            kwargs={"pk": self.object.pk}
+        )
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        if form.cleaned_data.get('password2'):
+            update_session_auth_hash(self.request, self.request.user)
+        return response
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['worker'] = Worker.objects.get(user=self.object)
+        except Worker.DoesNotExist:
+            context['worker'] = None
+        return context
