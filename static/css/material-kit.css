@@ -3035,7 +3035,8 @@ textarea.form-control-lg {
 }
 
 .form-switch {
-  padding-left: 2.375rem;
+  font-size: 14px;
+  padding-left: 30px;
 }
 
 .form-switch .form-check-input {
@@ -10111,8 +10112,8 @@ fieldset:disabled .btn {
 }
 
 .py-9 {
-  padding-top: 5rem !important;
-  padding-bottom: 5rem !important;
+  padding-top: 2rem !important;
+  padding-bottom: 2rem !important;
 }
 
 .py-10 {
@@ -27664,4 +27665,18 @@ pre[class*="language-"] {
 }
 .block-content-header {
   padding-left: 20px;
+}
+
+.checkbox-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-column-gap: 7.5rem;
+  grid-row-gap: 0.3rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+    .checkbox-container {
+        grid-template-columns: 1fr; /* Один стовпець на менших екранах */
+    }
 }

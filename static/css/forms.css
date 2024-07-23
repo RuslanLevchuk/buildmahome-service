@@ -547,3 +547,8 @@ form .related-widget-wrapper ul {
 .clearable-file-input input {
     margin-top: 0;
 }
+
+
+.form-group {
+    margin-bottom: 15px;
+}

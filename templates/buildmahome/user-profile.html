@@ -101,7 +101,7 @@
                   </div>
                 </div>
               {% if request.user.id == user.id %}
-                <a href="#" class="text-primary icon-move-right">&nbsp;&nbsp;&nbsp;Update profile
+                <a href="{% url 'buildmahome:update' user.id %}" class="text-primary icon-move-right">&nbsp;&nbsp;&nbsp;Update profile
                   <i class="fas fa-arrow-right text-sm ms-1"></i>
                 </a>
               {% endif %}
@@ -112,7 +112,7 @@
 
               {% else %}
                 <div class="block-content-header">
-                  <h3>&nbsp;&nbsp;&nbsp; You are unauthorized! Please, login.</h3>
+                  <h3>You are unauthorized! Please, login.</h3>
                 </div>
 
               {% endif %}

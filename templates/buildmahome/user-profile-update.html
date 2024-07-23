@@ -21,49 +21,130 @@
           <br><br>
           <div class="tab-content tab-space">
             <div class="tab-pane active" id="preview-features-1">
-
             
               {% if request.user.is_authenticated and request.user.id == user.id %}
                 <div class="block-content-header">
                   <h3>Profile update</h3>
                 </div>
-                
-              <section class="py-9">
-                <div class="container">
-                  <div class="row">
-                  
-                    <div class="col-lg-6 my-auto">
-                      <h3>{{ user.username}}</h3>
-                    </div>
-                  
-                    <table class="custom-table">
-                        <tbody>
-                        
-                            <tr>
-                                <td>Username</td>
-                            </tr>
-                            <tr>
-                                <td>First name</td>
-                            </tr>
-                            <tr>
-                                <td>Last name</td>
-                            </tr>
-                            <tr>
-                                <td>Email</td>
-                            </tr>
+              
+                <section class="py-9 position-relative">
+                  <div class="container">
+                    <form method="post">
+                      {% csrf_token %}
+                      {% load widget_tweaks %}
+    
+    
+                      <div class="row">
+                        <!-- left side -->
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <div class="input-group input-group-static mb-4">
+                              <label>{{ form.first_name.label }}</label>
+                              {% render_field form.first_name class+="form-control" %}
+                            </div>
+                            <small>{{ form.first_name.errors }}</small>
+                          </div>
+        
+                          <div class="form-group">
+                            <div class="input-group input-group-static mb-4">
+                              <label>{{ form.last_name.label }}</label>
+                              {% render_field form.last_name class+="form-control" %}
+                            </div>
+                            <small>{{ form.last_name.errors }}</small>
+                          </div>
+        
+                          <div class="form-group">
+                            <div class="input-group input-group-static mb-4">
+                              <label>{{ form.email.label }}</label>
+                              {% render_field form.email class+="form-control" %}
+                            </div>
+                            <small>{{ form.email.errors }}</small>
+                          </div>
+        
+                          <div class="form-group">
+                            <b>Password change section (leave blank if you don't need to change)</b>
+                          </div>
+        
+                          <div class="form-group">
+                            <div class="input-group input-group-static mb-4">
+                              <label>{{ form.old_password.label }}</label>
+                              {% render_field form.old_password class+="form-control" %}
+                            </div>
+                            <small>{{ form.old_password.errors }}</small>
+                          </div>
+        
+                          <div class="form-group">
+                            <div class="input-group input-group-static mb-4">
+                              <label>{{ form.password1.label }}</label>
+                              {% render_field form.password1 class+="form-control" %}
+                            </div>
+                            <small>{{ form.password1.errors }}</small>
+                          </div>
+        
+                          <div class="form-group">
+                            <div class="input-group input-group-static mb-4">
+                              <label>{{ form.password2.label }}</label>
+                              {% render_field form.password2 class+="form-control" %}
+                            </div>
+                            <small>{{ form.password2.errors }}</small>
+                          </div>
+                        </div>
                             
-                        </tbody>
-                      </table>
-                    
-                    <div class="col-lg-6 mt-lg-0 mt-5 ps-lg-0 ps-0">
-                      
-                    Right section
-                      
-                      
-                    </div>
+          
+                        <!-- right side -->
+                        <div class="col-md-6">
+          
+                          <div class="form-group">
+                            <div class="input-group input-group-static mb-4">
+                              <label>{{ form.phone_number.label }}</label>
+                              {% render_field form.phone_number class+="form-control" %}
+                            </div>
+                            <small>{{ form.phone_number.errors }}</small>
+                          </div>
+        
+                          <div class="form-group">
+                            <div class="input-group input-group-static mb-4">
+                              <label>{{ form.about.label }}</label>
+                              {% render_field form.about class+="form-control" %}
+                            </div>
+                            <small>{{ form.about.errors }}</small>
+                          </div>
+        
+                          <div class="form-group">
+                            <div class="input-group input-group-static mb-4">
+                              <label>{{ form.team.label }}</label>
+                              {% render_field form.team class+="form-control" %}
+                            </div>
+                            <small>{{ form.team.errors }}</small>
+                          </div>
+        
+                          <div class="form-group">
+                            <label>{{ form.skills.label }}</label>
+                            <br>
+                            <table>
+                              <tr>
+                                <td colspan="2">
+                                  <div class="checkbox-container">
+                                    {% for checkbox in form.skills %}
+                                      <div class="form-check form-switch">
+                                        {{ checkbox.tag }} {{ checkbox.choice_label }}
+                                      </div>
+                                    {% endfor %}
+                                  </div>
+                                </td>
+                              </tr>
+                            </table>         
+                          </div>
+                        
+                        </div>
+                        
+                      </div>
+    
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
                   </div>
-                </div>
-              </section>
+
+                </section>
 
               {% else %}
                 <div class="block-content-header">
@@ -71,7 +152,7 @@
                 </div>
 
               {% endif %}
-            
+  
             </div>
           </div>
         </div>
