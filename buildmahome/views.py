@@ -97,6 +97,5 @@ class WorkTeamListView(generic.ListView):
 class WorkTeamDetailView(generic.DetailView):
     model = WorkTeam
     queryset = WorkTeam.objects.prefetch_related("workers")
-    queryset = queryset.prefetch_related("skills")
     template_name = "buildmahome/work-team-detail.html"
     context_object_name = "work_team"
