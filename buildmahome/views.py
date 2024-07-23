@@ -69,3 +69,12 @@ class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
         except Worker.DoesNotExist:
             context['worker'] = None
         return context
+
+
+class WorkerListView(generic.ListView):
+    model = Worker
+    template_name = "buildmahome/worker-list.html"
+    context_object_name = "workers"
+
+    def get_queryset(self):
+        return Worker.objects.select_related('user').all().order_by('user__username')
