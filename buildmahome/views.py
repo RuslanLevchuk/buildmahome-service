@@ -1,4 +1,5 @@
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import request
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
@@ -18,7 +19,7 @@ class UserCreateView(generic.CreateView):
     success_url = reverse_lazy("buildmahome:index")
     
     
-class UserProfileView(generic.DetailView):
+class UserProfileView(LoginRequiredMixin, generic.DetailView):
     model = User
     queryset = User.objects.all()
     template_name = "buildmahome/user-profile.html"
@@ -39,7 +40,7 @@ class UserProfileView(generic.DetailView):
         return context
 
 
-class UserUpdateView(generic.UpdateView):
+class UserUpdateView(LoginRequiredMixin, generic.UpdateView):
     model = User
     form_class = UserUpdateForm
     template_name = "buildmahome/user-profile-update.html"
