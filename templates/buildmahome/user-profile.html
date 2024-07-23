@@ -22,56 +22,50 @@
           <div class="tab-content tab-space">
             <div class="tab-pane active" id="preview-features-1">
 
-              {% if request.user.is_authenticated %}
                 <div class="block-content-header">
                   <h3>User profile</h3>
                 </div>
                 
-              <section class="py-9">
-
-                <div class="container">
-                  <div class="row">
-                    <div class="col-lg-6 my-auto">
-                      
-                      <h3>{{ user.username}}</h3>
-                      {% if request.user.id == user.id %}
-                        {% if not user.first_name and not user.last_name %}
-                          You need to update your profile.
-                          <br>
-                          Some fields are empty.
-                        {% endif %}
-                      {% endif %}
-                      
-                      <p class="pe-5">
+                <section class="py-9">
+  
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-lg-6">
                         
-                      </p>
-                    
-                    </div>
-                    
-                    <div class="col-lg-6 mt-lg-0 mt-5 ps-lg-0 ps-0">
+                        <h3>{{ user.username}}</h3>
+                        {% if request.user.id == user.id %}
+                          {% if not user.first_name and not user.last_name %}
+                            You need to update your profile.
+                            <br>
+                            Some fields are empty.
+                          {% endif %}
+                        {% endif %}
+
+                      </div>
                       
-                      <table class="custom-table">
-                        <tbody>
+                      <div class="col-lg-6 mt-lg-0 mt-5 ps-lg-0 ps-0">
+                        
+                        <table class="custom-table">
+                          <tbody>
                             <tr>
-                                <td>Username</td>
-                                <td>{{ user.username }}</td>
+                              <td>Username</td>
+                              <td>{{ user.username }}</td>
                             </tr>
                             <tr>
-                                <td>First name</td>
-                                <td>{{ user.first_name }}</td>
+                              <td>First name</td>
+                              <td>{{ user.first_name }}</td>
                             </tr>
                             <tr>
-                                <td>Last name</td>
-                                <td>{{ user.last_name }}</td>
+                              <td>Last name</td>
+                              <td>{{ user.last_name }}</td>
                             </tr>
                             <tr>
-                                <td>Email</td>
-                                <td>{{ user.email }}</td>
+                              <td>Email</td>
+                              <td>{{ user.email }}</td>
                             </tr>
                             
                             {% if worker %}
                               
-                            
                               <tr>
                                 <td>Phone</td>
                                 <td>{{ worker.phone_number }}</td>
@@ -93,30 +87,21 @@
                             
                             {% endif %}
                             
-                        </tbody>
-                      </table>
+                          </tbody>
+                        </table>
                       
-                      
+                      </div>
                     </div>
+                  
+                    {% if request.user.id == user.id %}
+                    <a href="{% url 'buildmahome:update' user.id %}" class="text-primary icon-move-right">Update profile
+                      <i class="fas fa-arrow-right text-sm ms-1"></i>
+                    </a>
+                    {% endif %}
+                  
                   </div>
-                </div>
-              {% if request.user.id == user.id %}
-                <a href="{% url 'buildmahome:update' user.id %}" class="text-primary icon-move-right">&nbsp;&nbsp;&nbsp;Update profile
-                  <i class="fas fa-arrow-right text-sm ms-1"></i>
-                </a>
-              {% endif %}
-              
-              
-              
-              </section>
 
-              {% else %}
-                <div class="block-content-header">
-                  <h3>You are unauthorized! Please, login.</h3>
-                </div>
-
-              {% endif %}
-            
+                </section>
 
             </div>
           </div>
