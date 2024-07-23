@@ -77,4 +77,8 @@ class WorkerListView(generic.ListView):
     context_object_name = "workers"
 
     def get_queryset(self):
-        return Worker.objects.select_related('user').all().order_by('user__username')
+        worker = Worker.objects.select_related('user').all()
+        worker = worker.select_related("team")
+        worker = worker.prefetch_related("skills")
+        worker = worker.order_by('user__username')
+        return worker
