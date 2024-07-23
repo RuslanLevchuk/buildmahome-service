@@ -1,4 +1,4 @@
-{% extends 'buildmahome/layouts/base_background.html' %}
+ggg{% extends 'buildmahome/layouts/base_background.html' %}
 {% load static %}
 
 {% block title %} Material Kit 2 by Creative Tim {% endblock title %}
@@ -41,12 +41,12 @@
                               <small style="font-weight: normal; font-size: 16px;">( {{ worker.user.username }} )</small>
                             </h4>
                           <div class="detail-block">
-                            <b>✆</b> {{ worker.phone_number }}
+                            <br><b>✆</b> {{ worker.phone_number }}
                             <br><b>Work team:</b> {{ worker.team.name }}
                             <br><b>Skills:</b>
                             {% for skill in worker.skills.all %}
                               {{ skill.name }} {% if not forloop.last %}, {% endif %}
-                    {% endfor %}
+                            {% endfor %}
                             
                           </div>
                         </div>
