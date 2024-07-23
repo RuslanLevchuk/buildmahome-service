@@ -38,7 +38,11 @@
                         <div class="row">
                             <h4 class="text-dark">
                               {{ worker.user.first_name  }}
-                              <small style="font-weight: normal; font-size: 16px;">( {{ worker.user.username }} )</small>
+                              <small style="font-weight: normal; font-size: 16px;">
+                                <a href="{% url 'buildmahome:profile' worker.user.id %}" class="text-primary icon-move-right">( {{ worker.user.username }} )
+                                  <i class="fas fa-arrow-right text-sm ms-1"></i>
+                                </a>
+                              </small>
                             </h4>
                           <div class="detail-block">
                             <b>✆</b> {{ worker.phone_number }}

@@ -1,0 +1,62 @@
+{% extends 'buildmahome/layouts/base_background.html' %}
+{% load static %}
+
+{% block title %} Material Kit 2 by Creative Tim {% endblock title %}
+
+{% block body %} class="features-sections" {% endblock body %}
+
+{% block header %}
+
+{% include 'buildmahome/includes/navigation.html' %}
+
+{% endblock header %}
+
+
+{% block content %}
+
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-lg-12 mx-auto">
+        <div class="position-relative border-radius-xl overflow-hidden shadow-lg mb-7">
+          <br><br>
+          <div class="tab-content tab-space">
+            <div class="tab-pane active" id="preview-features-1">
+
+                <div class="block-content-header">
+                  <h3>User profile</h3>
+                </div>
+                
+                <section class="py-9">
+  
+                  <div class="container">
+                    <div class="row">
+                      
+                      <div class="col-lg-6">
+                        <h3>team information</h3>
+                      </div>
+                      
+
+                    </div>
+                  </div>
+
+                </section>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock content %}
+
+  {% block footer %}
+  
+  {% include 'buildmahome/includes/footer_fullscreen.html' %}
+  
+  {% endblock footer %}
+
+  {% block javascripts %}
+  
+  {% include 'buildmahome/includes/scripts_sections.html' %}
+  
+  {% endblock javascripts %}
