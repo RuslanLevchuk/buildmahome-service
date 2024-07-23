@@ -1,12 +1,13 @@
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Prefetch
 from django.http import request
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
 from buildmahome.forms import SignUpForm, UserUpdateForm
-from buildmahome.models import User, Worker, WorkTeam
+from buildmahome.models import User, Worker, WorkTeam, Skill
 
 
 class IndexView(generic.TemplateView):
@@ -94,8 +95,23 @@ class WorkTeamListView(generic.ListView):
         work_team = work_team.prefetch_related("workers")
         return work_team
 
+
 class WorkTeamDetailView(generic.DetailView):
     model = WorkTeam
-    queryset = WorkTeam.objects.prefetch_related("workers")
+    queryset = WorkTeam.objects.prefetch_related(
+        Prefetch('workers', queryset=Worker.objects.prefetch_related('skills')
+                 ))
     template_name = "buildmahome/work-team-detail.html"
     context_object_name = "work_team"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        work_team = self.get_object()
+        workers = work_team.workers.all().prefetch_related('user')
+
+        workers_count = workers.count()
+        distinct_skills = Skill.objects.filter(workers__in=workers).distinct()
+        context["workers"] = workers
+        context["skills"] = distinct_skills
+        context["workers_count"] = workers_count
+        return context
