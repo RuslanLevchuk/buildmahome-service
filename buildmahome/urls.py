@@ -5,8 +5,12 @@ from .views import (
     UserCreateView,
     UserProfileView,
     UserUpdateView,
-    WorkerListView
+    WorkerListView,
+    WorkTeamListView
 )
+
+
+
 
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
@@ -14,6 +18,7 @@ urlpatterns = [
     path("accounts/<int:pk>/profile/", UserProfileView.as_view(), name="profile"),
     path("accounts/<int:pk>/update/", UserUpdateView.as_view(), name="update"),
     path("workers/", WorkerListView.as_view(), name="worker_list"),
+    path("workteams/", WorkTeamListView.as_view(), name="work_team_list"),
 ]
 
 app_name = "buildmahome"

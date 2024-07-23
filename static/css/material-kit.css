@@ -27690,7 +27690,3 @@ pre[class*="language-"] {
         grid-template-columns: 1fr; /* Один стовпець на менших екранах */
     }
 }
-
-.detail-block {
-  margin-top: -25px;
-}

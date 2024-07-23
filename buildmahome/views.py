@@ -6,7 +6,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 
 from buildmahome.forms import SignUpForm, UserUpdateForm
-from buildmahome.models import User, Worker
+from buildmahome.models import User, Worker, WorkTeam
 
 
 class IndexView(generic.TemplateView):
@@ -82,3 +82,13 @@ class WorkerListView(generic.ListView):
         worker = worker.prefetch_related("skills")
         worker = worker.order_by('user__username')
         return worker
+
+
+class WorkTeamListView(generic.ListView):
+    model = WorkTeam
+    template_name = "buildmahome/workteam-list.html"
+    context_object_name = "work_teams"
+
+    def get_queryset(self):
+        work_team = WorkTeam.objects.all()
+        return work_team

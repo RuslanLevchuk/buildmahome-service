@@ -1,4 +1,4 @@
-ggg{% extends 'buildmahome/layouts/base_background.html' %}
+{% extends 'buildmahome/layouts/base_background.html' %}
 {% load static %}
 
 {% block title %} Material Kit 2 by Creative Tim {% endblock title %}
@@ -23,30 +23,28 @@ ggg{% extends 'buildmahome/layouts/base_background.html' %}
             <div class="tab-pane active" id="preview-features-1">
 
               <div class="block-content-header">
-                <h3>User profile</h3>
+                <h3>Work Teams</h3>
               </div>
 
               <section class="py-9">
 
                 <div class="container">
                   <div class="row">
-                    {% for worker in workers %}
+
+                    {% for team in work_teams %}
 
                     <div class="page-header py-6 py-md-5 mb-3 border-radius-xl" style="background-image: url('{% static 'img/shapes/waves-white.svg' %}')">
                       <span class="mask bg-gradient-faded-light"></span>
                       <div class="container">
                         <div class="row">
                             <h4 class="text-dark">
-                              {{ worker.user.first_name  }}
-                              <small style="font-weight: normal; font-size: 16px;">( {{ worker.user.username }} )</small>
+                              {{ team.name }}
                             </h4>
                           <div class="detail-block">
-                            <br><b>✆</b> {{ worker.phone_number }}
-                            <br><b>Work team:</b> {{ worker.team.name }}
-                            <br><b>Skills:</b>
-                            {% for skill in worker.skills.all %}
-                              {{ skill.name }} {% if not forloop.last %}, {% endif %}
-                            {% endfor %}
+                            <b class="h6">Description</b>
+                            <br>{{ team.description }}
+                            <br><b>✆ </b>{{ team.phone_number }}
+                            <br><b>Workers:</b>
                             
                           </div>
                         </div>
