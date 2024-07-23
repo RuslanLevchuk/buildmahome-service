@@ -39,7 +39,7 @@ class SignUpForm(PasswordsMixin):
 
 class UserUpdateForm(PasswordsMixin):
     old_password = forms.CharField(
-        label="Old Password",
+        label="Old password",
         widget=forms.PasswordInput,
         required=False,
         strip=False
@@ -56,7 +56,7 @@ class UserUpdateForm(PasswordsMixin):
     )
     about = forms.CharField(
         label='About',
-        widget=forms.Textarea,
+        widget=forms.Textarea(attrs={"rows": 3}),
         required=False
     )
     phone_number = forms.CharField(
@@ -70,7 +70,7 @@ class UserUpdateForm(PasswordsMixin):
     skills = forms.ModelMultipleChoiceField(
         queryset=Skill.objects.all(),
         required=False,
-        widget=CheckboxSelectMultiple
+        widget=CheckboxSelectMultiple(attrs={'class': 'form-check-input'})
     )
 
     class Meta:
