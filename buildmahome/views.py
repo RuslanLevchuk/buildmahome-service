@@ -91,4 +91,5 @@ class WorkTeamListView(generic.ListView):
 
     def get_queryset(self):
         work_team = WorkTeam.objects.all()
+        work_team = work_team.prefetch_related("workers")
         return work_team

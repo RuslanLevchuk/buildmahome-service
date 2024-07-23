@@ -44,7 +44,10 @@
                             <b class="h6">Description</b>
                             <br>{{ team.description }}
                             <br><b>✆ </b>{{ team.phone_number }}
-                            <br><b>Workers:</b>
+                            <br><b>Workers:</b> 
+                            {% for worker in team.workers.all %}
+                              {{ worker.user.username }} {% if not forloop.last %}, {% endif %}
+                            {% endfor %}
                             
                           </div>
                         </div>
