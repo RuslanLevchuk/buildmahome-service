@@ -45,7 +45,7 @@
                   </div>
                   </div>
                 </li>
-            
+
                 {% if user.is_worker %}
                 <li class="nav-item dropdown dropdown-hover mx-2">
                   <a class="nav-link ps-2 d-flex cursor-pointer align-items-center font-weight-bold" id="dropdownMenuPages"
@@ -55,14 +55,14 @@
                   </a>
                   <div class="dropdown-menu dropdown-menu-animation ms-n3 dropdown-md p-3 border-radius-xl mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages">
                     <div class="d-none d-lg-block">
-                      <a href="#" class="dropdown-item border-radius-md">
+                      <a href="{% url 'buildmahome:work_team_create' %}" class="dropdown-item border-radius-md">
                         <span>Create work team</span>
                       </a>
                       <a href="#" class="dropdown-item border-radius-md">
                         <span>Create new skills</span>
                       </a>
                       <a href="#" class="dropdown-item border-radius-md">
-                        <span>Wiew tasks</span>
+                        <span>View tasks</span>
                       </a>
                     </div>
                   </div>
