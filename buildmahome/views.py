@@ -115,3 +115,19 @@ class WorkTeamDetailView(generic.DetailView):
         context["skills"] = distinct_skills
         context["workers_count"] = workers_count
         return context
+
+
+class MakeWorkerView(LoginRequiredMixin, generic.TemplateView):
+    template_name = "buildmahome/action-message.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["message"] = "You are worker now!"
+        return context
+
+    def get(self, *args, **kwargs):
+        user = self.request.user
+        user.is_worker = True
+        user.save()
+        Worker.objects.create(user=user)
+        return super().get(request, *args, **kwargs)
