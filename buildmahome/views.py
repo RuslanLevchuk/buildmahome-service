@@ -1,12 +1,12 @@
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Prefetch
-from django.http import request
+from django.http import request, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
-from buildmahome.forms import SignUpForm, UserUpdateForm
+from buildmahome.forms import SignUpForm, UserUpdateForm, WorkTeamCreateFrom
 from buildmahome.models import User, Worker, WorkTeam, Skill
 
 
@@ -134,4 +134,44 @@ class MakeWorkerView(LoginRequiredMixin, generic.TemplateView):
 
 
 class WorkTeamCreateView(LoginRequiredMixin, generic.CreateView):
-    model = WorkTeam
+    form_class = WorkTeamCreateFrom
+    template_name = "buildmahome/work-team-create.html"
+
+    def dispatch(self, *args, **kwargs):
+        try:
+            worker = Worker.objects.get(user=self.request.user)
+            if worker.team:
+                message = "You are already a member of a team. <br>Leave existing team to create new one.</br>"
+                return HttpResponseRedirect(
+                    f"{reverse('buildmahome:successful_action')}?message={message}")
+        except Worker.DoesNotExist:
+            pass
+        return super().dispatch(*args, **kwargs)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.object = None
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        self.object = form.save()
+        team_name = self.object.name
+        message = f"Team {team_name} created successfully!"
+        return HttpResponseRedirect(
+            f"{reverse('buildmahome:successful_action')}?message={message}")
+
+    def get_success_url(self):
+        return reverse('buildmahome:successful_action')
+
+
+class SuccessfulActionView(generic.TemplateView):
+    template_name = "buildmahome/action-message.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["message"] = self.request.GET.get('message', '')
+        return context

@@ -131,3 +131,46 @@ class UserUpdateForm(PasswordsMixin):
             pass
         return user
 
+
+class WorkTeamCreateFrom(forms.ModelForm):
+    workers = forms.ModelMultipleChoiceField(
+        queryset=Worker.objects.none(),
+        required=False,
+        widget=CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+        label="Available Workers"
+    )
+
+    class Meta:
+        model = WorkTeam
+        fields = ("name", "description", "phone_number", "workers")
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        if self.user:
+            try:
+                worker = Worker.objects.get(user=self.user)
+                self.fields['workers'].queryset = Worker.objects.filter(
+                        team__isnull=True).exclude(user=worker.user)
+                self.fields['phone_number'].initial = worker.phone_number
+            except Worker.DoesNotExist:
+                pass
+
+    def save(self, commit=True):
+        work_team = super().save(commit=False)
+        if commit:
+            work_team.save()
+            self.save_m2m()
+
+        if self.user:
+            try:
+                worker = Worker.objects.get(user=self.user)
+                worker.team = work_team
+                worker.save()
+            except Worker.DoesNotExist:
+                pass
+        selected_workers = self.cleaned_data['workers']
+        selected_workers.update(team=work_team)
+        return work_team
+
