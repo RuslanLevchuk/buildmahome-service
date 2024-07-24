@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
-from buildmahome.forms import SignUpForm, UserUpdateForm, WorkTeamCreateFrom
+from buildmahome.forms import SignUpForm, UserUpdateForm, WorkTeamCreateFrom, WorkTeamUpdateFrom
 from buildmahome.models import User, Worker, WorkTeam, Skill
 
 
@@ -175,3 +175,24 @@ class SuccessfulActionView(generic.TemplateView):
         context = super().get_context_data(**kwargs)
         context["message"] = self.request.GET.get('message', '')
         return context
+
+
+class WorkTeamUpdateView(LoginRequiredMixin, generic.UpdateView):
+    model = WorkTeam
+    template_name = "buildmahome/work-team-update.html"
+    form_class = WorkTeamUpdateFrom
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        team_name = self.object.name
+        message = f"Team {team_name} updated successfully!"
+        return HttpResponseRedirect(
+            f"{reverse('buildmahome:successful_action')}?message={message}")
+
+    def get_success_url(self):
+        return reverse('buildmahome:successful_action')

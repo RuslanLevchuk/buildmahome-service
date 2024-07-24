@@ -174,3 +174,46 @@ class WorkTeamCreateFrom(forms.ModelForm):
         selected_workers.update(team=work_team)
         return work_team
 
+
+class WorkTeamUpdateFrom(forms.ModelForm):
+    workers = forms.ModelMultipleChoiceField(
+        queryset=Worker.objects.none(),
+        required=False,
+        widget=CheckboxSelectMultiple(attrs={'class': 'form-check-input'}),
+        label="Available Workers"
+    )
+
+    class Meta:
+        model = WorkTeam
+        fields = ("name", "description", "phone_number", "workers")
+
+    def __init__(self, *args, **kwargs):
+        # Extract the instance of the WorkTeam to be updated
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
+        # Get the current instance if available (for updating existing WorkTeam)
+        instance = kwargs.get('instance')
+
+        if instance:
+            team_members = instance.workers.all()
+
+            # Get workers without a team
+            workers_without_team = Worker.objects.filter(team__isnull=True)
+
+            # Combine both querysets
+            self.fields[
+                'workers'].queryset = workers_without_team | team_members
+            self.fields['workers'].initial = team_members
+
+    def save(self, commit=True):
+        work_team = super().save(commit=False)
+        if commit:
+            work_team.save()
+            self.save_m2m()
+
+        # Assign the selected workers to the team
+        selected_workers = self.cleaned_data.get('workers', [])
+        work_team.workers.set(selected_workers)
+
+        return work_team
