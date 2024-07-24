@@ -131,3 +131,7 @@ class MakeWorkerView(LoginRequiredMixin, generic.TemplateView):
         user.save()
         Worker.objects.create(user=user)
         return super().get(request, *args, **kwargs)
+
+
+class WorkTeamCreateView(LoginRequiredMixin, generic.CreateView):
+    model = WorkTeam
