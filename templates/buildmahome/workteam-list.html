@@ -38,7 +38,7 @@
                       <div class="container">
                         <div class="row">
                             <h4 class="text-dark">
-                              {{ team.name }}
+                              <a href="{% url 'buildmahome:work_team_detail' team.id %}">{{ team.name }}</a>
                             </h4>
                           <div class="detail-block">
                             <b class="h6">Description</b>
