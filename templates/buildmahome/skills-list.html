@@ -23,7 +23,7 @@
             <div class="tab-pane active" id="preview-features-1">
 
               <div class="block-content-header">
-                <h3>Work Teams</h3>
+                <h3>Skills</h3>
               </div>
 
               <section class="py-9">
@@ -31,22 +31,21 @@
                 <div class="container">
                   <div class="row">
 
-                    {% for team in work_teams %}
+                    {% for skill, teams in skills.items %}
 
                     <div class="page-header py-6 py-md-5 mb-3 border-radius-xl" style="background-image: url('{% static 'img/shapes/waves-white.svg' %}')">
                       <span class="mask bg-gradient-faded-light"></span>
                       <div class="container">
                         <div class="row">
                             <h4 class="text-dark">
-                              <a href="{% url 'buildmahome:work_team_detail' team.id %}">{{ team.name }}</a>
+                              {{ skill.name }}
                             </h4>
                           <div class="detail-block">
                             <b class="h6">Description</b>
-                            <br>{{ team.description }}
-                            <br><b>✆ </b>{{ team.phone_number }}
-                            <br><b>Workers:</b>
-                            {% for worker in team.workers.all %}
-                              <a href="{% url 'buildmahome:profile' worker.user.id %}">{{ worker.user.username }}</a> {% if not forloop.last %}, {% endif %}
+                            <br>{{ skill.description }}
+                            <br><b>Teams:</b>
+                            {% for team in teams %}
+                              <a href="{% url 'buildmahome:work_team_detail' team.id %}">{{ team.name }}</a> {% if not forloop.last %}, {% endif %}
                             {% endfor %}
                             
                           </div>
