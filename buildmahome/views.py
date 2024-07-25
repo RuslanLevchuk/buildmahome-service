@@ -6,7 +6,8 @@ from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
-from buildmahome.forms import SignUpForm, UserUpdateForm, WorkTeamCreateFrom, WorkTeamUpdateFrom
+from buildmahome.forms import SignUpForm, UserUpdateForm, WorkTeamCreateFrom, \
+    WorkTeamUpdateFrom, SkillCreateForm
 from buildmahome.models import User, Worker, WorkTeam, Skill
 
 
@@ -225,3 +226,18 @@ class SkillsListView(generic.ListView):
             skill_teams_dict[skill] = teams
         context['skills'] = skill_teams_dict
         return context
+
+
+class SkillCreateView(generic.CreateView):
+    form_class = SkillCreateForm
+    template_name = "buildmahome/skill-create.html"
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        skill_name = self.object.name
+        message = f"Skill \"{skill_name}\" created successfully!"
+        return HttpResponseRedirect(
+            f"{reverse('buildmahome:successful_action')}?message={message}")
+
+    def get_success_url(self):
+        return reverse('buildmahome:successful_action')
