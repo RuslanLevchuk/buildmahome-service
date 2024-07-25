@@ -75,13 +75,16 @@
                                 <tr>
                                   <td colspan="2">
                                     <div class="checkbox-container">
+                                      <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="fake-checkbox" checked disabled>
+                                        <label class="form-check-label" for="checkbox">{{ user.username }} (you)</label>
+                                      </div>
                                       {% for checkbox in form.workers %}
                                         <div class="form-check form-switch">
                                           {{ checkbox.tag }} {{ checkbox.choice_label }}
                                         </div>
                                       {% endfor %}
                                     </div>
-                                  <small style="color: #DD4A68">You will be added as team member automatically</small>
                                   </td>
                                 </tr>
                               </table>     

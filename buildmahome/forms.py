@@ -193,8 +193,8 @@ class WorkTeamUpdateFrom(forms.ModelForm):
 
         instance = kwargs.get('instance')
 
-        if instance:
-            team_members = instance.workers.all()
+        if instance and self.user:
+            team_members = instance.workers.all().exclude(user=self.user)
 
             workers_without_team = Worker.objects.filter(team__isnull=True)
 
@@ -208,14 +208,21 @@ class WorkTeamUpdateFrom(forms.ModelForm):
             work_team.save()
             self.save_m2m()
 
-        selected_workers = self.cleaned_data.get('workers', [])
+        selected_workers = list(self.cleaned_data.get('workers', []))
+
+        if self.user:
+            try:
+                current_worker = Worker.objects.get(user=self.user)
+                selected_workers.append(current_worker)
+            except Worker.DoesNotExist:
+                pass
+
         work_team.workers.set(selected_workers)
 
         return work_team
 
 
 class SkillCreateForm(forms.ModelForm):
-
     class Meta:
         model = Skill
-        fields = ('name', 'description')
+        fields = ("name", "description")
