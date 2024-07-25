@@ -72,7 +72,9 @@
                               </tr>
                               <tr>
                                 <td>Team</td>
-                                <td><a href="{% url 'buildmahome:work_team_detail' worker.team.id%}">{{ worker.team.name }}</a></td>
+                                {% if worker.team %}
+                                  <td><a href="{% url 'buildmahome:work_team_detail' worker.team.id%}">{{ worker.team.name }}</a></td>
+                                {% endif %}
                               </tr>
                               <tr>
                                 <td>Skills</td>
