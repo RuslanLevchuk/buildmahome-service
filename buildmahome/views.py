@@ -114,6 +114,10 @@ class WorkTeamDetailView(generic.DetailView):
         context["workers"] = workers
         context["skills"] = distinct_skills
         context["workers_count"] = workers_count
+        try:
+            context["current_worker"] = Worker.objects.get(user=self.request.user)
+        except Worker.DoesNotExist:
+            context["current_worker"] = None
         return context
 
 

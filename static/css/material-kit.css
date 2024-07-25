@@ -27693,10 +27693,10 @@ pre[class*="language-"] {
 
 .items-grid {
   padding-bottom: 15px;
-  display: grid;
+  display: contents;
   grid-template-columns: repeat(3, 1fr);
-  grid-column-gap: 7.5rem;
-  grid-row-gap: 0.3rem;
+  grid-column-gap: 1px;
+  grid-row-gap: 0.1rem;
   white-space: nowrap;
 }
 

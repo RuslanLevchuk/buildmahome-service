@@ -188,20 +188,16 @@ class WorkTeamUpdateFrom(forms.ModelForm):
         fields = ("name", "description", "phone_number", "workers")
 
     def __init__(self, *args, **kwargs):
-        # Extract the instance of the WorkTeam to be updated
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
 
-        # Get the current instance if available (for updating existing WorkTeam)
         instance = kwargs.get('instance')
 
         if instance:
             team_members = instance.workers.all()
 
-            # Get workers without a team
             workers_without_team = Worker.objects.filter(team__isnull=True)
 
-            # Combine both querysets
             self.fields[
                 'workers'].queryset = workers_without_team | team_members
             self.fields['workers'].initial = team_members
@@ -212,7 +208,6 @@ class WorkTeamUpdateFrom(forms.ModelForm):
             work_team.save()
             self.save_m2m()
 
-        # Assign the selected workers to the team
         selected_workers = self.cleaned_data.get('workers', [])
         work_team.workers.set(selected_workers)
 
