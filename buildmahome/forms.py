@@ -212,3 +212,10 @@ class WorkTeamUpdateFrom(forms.ModelForm):
         work_team.workers.set(selected_workers)
 
         return work_team
+
+
+class SkillCreateForm(forms.ModelForm):
+
+    class Meta:
+        model = Skill
+        fields = ('name', 'description')
