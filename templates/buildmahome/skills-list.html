@@ -22,13 +22,24 @@
           <div class="tab-content tab-space">
             <div class="tab-pane active" id="preview-features-1">
 
-              <div class="block-content-header">
-                <h3>Skills</h3>
-              </div>
-
               <section class="py-9">
 
                 <div class="container">
+                
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <div class="block-content-header">
+                    <h3>Skills</h3>
+                  </div>
+                    <div class="d-block">
+                      {% if user.is_worker %}
+                        <a href="{% url 'buildmahome:skill_create' %}">
+                          <button type="button" class="btn btn-sm btn-outline-info text-nowrap mb-0">Add skill</button>
+                        </a>
+                      {% endif %}
+
+                    </div>
+                  </div>
+                
                   <div class="row">
 
                     {% for skill, teams in skills.items %}
