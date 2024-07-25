@@ -11,7 +11,8 @@ from .views import (
     MakeWorkerView,
     WorkTeamCreateView,
     SuccessfulActionView,
-    WorkTeamUpdateView
+    WorkTeamUpdateView,
+    SkillsListView
 )
 
 
@@ -29,6 +30,7 @@ urlpatterns = [
     path("workteams/create", WorkTeamCreateView.as_view(), name="work_team_create"),
     path("succesful/", SuccessfulActionView.as_view(), name="successful_action"),
     path("workteams/<int:pk>/update/", WorkTeamUpdateView.as_view(), name="team_update"),
+    path("skills/", SkillsListView.as_view(), name="skills_list"),
 ]
 
 app_name = "buildmahome"

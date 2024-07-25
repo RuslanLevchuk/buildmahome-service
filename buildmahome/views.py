@@ -200,3 +200,28 @@ class WorkTeamUpdateView(LoginRequiredMixin, generic.UpdateView):
 
     def get_success_url(self):
         return reverse('buildmahome:successful_action')
+
+
+class SkillsListView(generic.ListView):
+    model = Skill
+    template_name = "buildmahome/skills-list.html"
+
+    def get_context_data(self, **kwargs):
+        # get all work teams with workers that has current skill
+        context = super().get_context_data(**kwargs)
+        skill_teams = Skill.objects.prefetch_related(
+            Prefetch(
+                'workers',
+                queryset=Worker.objects.select_related('team').filter(
+                    team__isnull=False)
+            )
+        )
+        skill_teams_dict = {}
+        for skill in skill_teams:
+            teams = set()
+            for worker in skill.workers.all():
+                if worker.team:
+                    teams.add(worker.team)
+            skill_teams_dict[skill] = teams
+        context['skills'] = skill_teams_dict
+        return context
