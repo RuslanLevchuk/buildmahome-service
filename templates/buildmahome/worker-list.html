@@ -19,7 +19,7 @@
       <div class="col-lg-12 mx-auto">
         <div class="position-relative border-radius-xl overflow-hidden shadow-lg mb-7">
           <br><br>
-          <div class="tab-content tab-space">
+          <div class="tab-content tab-space"> 
             <div class="tab-pane active" id="preview-features-1">
 
               <div class="block-content-header">
@@ -46,7 +46,9 @@
                             </h4>
                           <div class="detail-block">
                             <b>✆</b> {{ worker.phone_number }}
-                            <br><b>Work team:</b> {{ worker.team.name }}
+                            {% if worker.team %}
+                              <br><b>Work team:</b> <a href="{% url 'buildmahome:work_team_detail'  worker.team.id %}">{{ worker.team.name }}</a>
+                            {% endif %}
                             <br><b>Skills:</b>
                             {% for skill in worker.skills.all %}
                               {{ skill.name }} {% if not forloop.last %}, {% endif %}
