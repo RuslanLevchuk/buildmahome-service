@@ -3,7 +3,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Prefetch
 from django.http import request, HttpResponseRedirect
-from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
@@ -80,12 +79,31 @@ class WorkerListView(generic.ListView):
     context_object_name = "workers"
     paginate_by = 3
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.search_query = None
+        self.worker = Worker.objects.select_related('user').all()
+
     def get_queryset(self):
-        worker = Worker.objects.select_related('user').all()
-        worker = worker.select_related("team")
-        worker = worker.prefetch_related("skills")
-        worker = worker.order_by('user__username')
-        return worker
+        self.worker = self.worker.select_related("team")
+        self.worker = self.worker.prefetch_related("skills")
+        self.worker = self.worker.order_by('user__username')
+        self.search_query = self.request.GET.get("search_data", None)
+        if self.search_query:
+            self.worker = self.worker.filter(
+                user__username__icontains=self.search_query)
+
+        return self.worker
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(object_list=object_list, **kwargs)
+        context["search_form"] = ListSearchForm(
+            placeholder="Search by username...",
+            initial={"search_data": self.search_query}
+        )
+
+        context["workers"] = self.worker
+        return context
 
 
 class WorkTeamListView(generic.ListView):
@@ -94,10 +112,24 @@ class WorkTeamListView(generic.ListView):
     context_object_name = "work_teams"
     paginate_by = 3
 
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.search_query = None
+        self.work_team = WorkTeam.objects.all()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.search_query = self.request.GET.get("search_data", None)
+        context["search_form"] = ListSearchForm(
+            placeholder="Search team by name...",
+            initial={"search_data": self.search_query}
+        )
+
+        return context
+
     def get_queryset(self):
-        work_team = WorkTeam.objects.all()
-        work_team = work_team.prefetch_related("workers")
-        return work_team
+        self.work_team = self.work_team.prefetch_related("workers")
+        return self.work_team
 
 
 class WorkTeamDetailView(generic.DetailView):
