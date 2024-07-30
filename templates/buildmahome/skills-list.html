@@ -42,7 +42,7 @@
                 
                   <div class="row">
 
-                    {% for skill, teams in skills.items %}
+                    {% for skill, teams in skills_page %}
 
                     <div class="page-header py-6 py-md-5 mb-3 border-radius-xl" style="background-image: url('{% static 'img/shapes/waves-white.svg' %}')">
                       <span class="mask bg-gradient-faded-light"></span>
@@ -70,6 +70,8 @@
                 </div>
 
               </section>
+            
+              {% include 'buildmahome/includes/pagination.html' %}
 
             </div>
           </div>
