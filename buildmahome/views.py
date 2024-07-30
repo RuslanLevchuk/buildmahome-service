@@ -102,7 +102,6 @@ class WorkerListView(generic.ListView):
             initial={"search_data": self.search_query}
         )
 
-        context["workers"] = self.worker
         return context
 
 
@@ -129,6 +128,11 @@ class WorkTeamListView(generic.ListView):
 
     def get_queryset(self):
         self.work_team = self.work_team.prefetch_related("workers")
+        self.search_query = self.request.GET.get("search_data", None)
+        if self.search_query:
+            self.work_team = self.work_team.filter(
+                name__icontains=self.search_query)
+
         return self.work_team
 
 
