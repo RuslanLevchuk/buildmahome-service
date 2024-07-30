@@ -226,3 +226,17 @@ class SkillCreateForm(forms.ModelForm):
     class Meta:
         model = Skill
         fields = ("name", "description")
+
+
+class ListSearchForm(forms.Form):
+
+    search_data = forms.CharField(
+        max_length=100,
+        required=False,
+        label="",
+        widget=forms.TextInput()
+    )
+
+    def __init__(self, *args, placeholder="Search", **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["search_data"].widget.attrs["placeholder"] = placeholder
