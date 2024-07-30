@@ -1,6 +1,8 @@
 {% load math_tag %}
+{% load query_transform %}
 
 {% if is_paginated %}
+  {% if paginator.num_pages > 1 %}
   <section class="py-2">
     <div class="container">
       <div class="row justify-space-between py-2">
@@ -9,7 +11,7 @@
 
             {% if page_obj.has_previous %}
             <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.previous_page_number }}"  aria-label="Previous">
+              <a class="page-link" href="?{% query_transform request page=page_obj.previous_page_number %}" aria-label="Previous">
                 <span aria-hidden="true"><i class="material-icons" aria-hidden="true">chevron_left</i></span>
               </a>
             </li>
@@ -20,16 +22,18 @@
             {% else %}
             <li class="page-item">
             {% endif %}
-              <a class="page-link" href="?page=1">1</a>
-
+              <a class="page-link" href="?{% query_transform request page=1 %}">1</a>
+            </li>
+          
+            
             {% if paginator.num_pages > 3 and  page_obj.number > 2 %}
             <li>...</li>
             {% endif %}
 
             {% if page_obj.number > 1 and page_obj.number < paginator.num_pages %}
-            </li>
+            
             <li class="page-item active">
-              <a class="page-link" href="javascript:;">{{ page_obj.number }}</a>
+              <a class="page-link" href="#">{{ page_obj.number }}</a>
             </li>
             {% endif %}
 
@@ -43,19 +47,21 @@
             {% else %}
             <li class="page-item">
             {% endif %}
-              <a class="page-link" href="?page={{ paginator.num_pages }}">{{ paginator.num_pages }}</a>
+              <a class="page-link" href="?{% query_transform request page=paginator.num_pages %}">{{ paginator.num_pages }}</a>
 
-            {% if page_obj.has_next %}
+            {% if page_obj.number < paginator.num_pages %}
             <li class="page-item">
-              <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+              <a class="page-link" href="?{% query_transform request page=page_obj.next_page_number %}" aria-label="Next">
                 <span aria-hidden="true"><i class="material-icons" aria-hidden="true">chevron_right</i></span>
               </a>
             </li>
             {% endif %}
+            
 
           </ul>
         </div>
       </div>
     </div>
   </section>
+{% endif %}
 {% endif %}

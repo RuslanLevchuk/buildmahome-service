@@ -1,0 +1,9 @@
+<div class="d-flex m-lg-2">
+  {% load widget_tweaks %}
+  <form method="get" action="{{ request.path }}" class="d-flex align-items-center">
+    <div class="input-group input-group-dynamic">
+      {% render_field search_form.search_data class+="form-control" %}
+    </div>
+      <button type="submit" class="btn btn-secondary text-nowrap mb-2">🔍︎</button>
+  </form>
+</div>
