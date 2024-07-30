@@ -1,5 +1,6 @@
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Prefetch
 from django.http import request, HttpResponseRedirect
 from django.shortcuts import render
@@ -77,6 +78,7 @@ class WorkerListView(generic.ListView):
     model = Worker
     template_name = "buildmahome/worker-list.html"
     context_object_name = "workers"
+    paginate_by = 3
 
     def get_queryset(self):
         worker = Worker.objects.select_related('user').all()
@@ -90,6 +92,7 @@ class WorkTeamListView(generic.ListView):
     model = WorkTeam
     template_name = "buildmahome/workteam-list.html"
     context_object_name = "work_teams"
+    paginate_by = 3
 
     def get_queryset(self):
         work_team = WorkTeam.objects.all()
@@ -206,6 +209,7 @@ class WorkTeamUpdateView(LoginRequiredMixin, generic.UpdateView):
 class SkillsListView(generic.ListView):
     model = Skill
     template_name = "buildmahome/skills-list.html"
+    paginate_by = 5
 
     def get_context_data(self, **kwargs):
         # get all work teams with workers that has current skill
@@ -224,7 +228,20 @@ class SkillsListView(generic.ListView):
                 if worker.team:
                     teams.add(worker.team)
             skill_teams_dict[skill] = teams
-        context['skills'] = skill_teams_dict
+
+        current_page = self.request.GET.get("page", 1)
+        paginator = Paginator(list(skill_teams_dict.items()), self.paginate_by)
+
+        try:
+            skills_page = paginator.page(current_page)
+        except PageNotAnInteger:
+            skills_page = paginator.page(1)
+        except EmptyPage:
+            skills_page = paginator.page(paginator.num_pages)
+
+        context['skills_page'] = skills_page
+        context['paginator'] = paginator
+
         return context
 
 
