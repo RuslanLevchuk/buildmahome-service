@@ -216,7 +216,7 @@ class SkillsListView(generic.ListView):
         context = super().get_context_data(**kwargs)
         search_query = self.request.GET.get("search_data", None)
         context["search_form"] = ListSearchForm(
-            placeholder="Search by name",
+            placeholder="Search skill...",
             initial={"search_data": search_query}
         )
 
