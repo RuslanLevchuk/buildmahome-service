@@ -8,7 +8,7 @@ from django.urls import reverse, reverse_lazy
 from django.views import generic
 
 from buildmahome.forms import SignUpForm, UserUpdateForm, WorkTeamCreateFrom, \
-    WorkTeamUpdateFrom, SkillCreateForm
+    WorkTeamUpdateFrom, SkillCreateForm, ListSearchForm
 from buildmahome.models import User, Worker, WorkTeam, Skill
 
 
@@ -214,6 +214,12 @@ class SkillsListView(generic.ListView):
     def get_context_data(self, **kwargs):
         # get all work teams with workers that has current skill
         context = super().get_context_data(**kwargs)
+        search_query = self.request.GET.get("search_data", None)
+        context["search_form"] = ListSearchForm(
+            placeholder="Search by name",
+            initial={"search_data": search_query}
+        )
+
         skill_teams = Skill.objects.prefetch_related(
             Prefetch(
                 'workers',
@@ -221,6 +227,10 @@ class SkillsListView(generic.ListView):
                     team__isnull=False)
             )
         )
+
+        if search_query:
+            skill_teams = skill_teams.filter(name__icontains=search_query)
+
         skill_teams_dict = {}
         for skill in skill_teams:
             teams = set()
