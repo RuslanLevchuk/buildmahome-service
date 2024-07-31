@@ -3,11 +3,14 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Prefetch
 from django.http import request, HttpResponseRedirect
+from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 
+from bootstrap_datepicker_plus.widgets import DateTimePickerInput
+
 from buildmahome.forms import SignUpForm, UserUpdateForm, WorkTeamCreateFrom, \
-    WorkTeamUpdateFrom, SkillCreateForm, ListSearchForm
+    WorkTeamUpdateFrom, SkillCreateForm, ListSearchForm, TaskCreateForm
 from buildmahome.models import User, Worker, WorkTeam, Skill
 
 
@@ -299,6 +302,31 @@ class SkillCreateView(generic.CreateView):
         response = super().form_valid(form)
         skill_name = self.object.name
         message = f"Skill \"{skill_name}\" created successfully!"
+        return HttpResponseRedirect(
+            f"{reverse('buildmahome:successful_action')}?message={message}")
+
+    def get_success_url(self):
+        return reverse('buildmahome:successful_action')
+
+
+
+class TaskCreateView(generic.CreateView):
+    form_class = TaskCreateForm
+    template_name = "buildmahome/task-create.html"
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.object = None
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        return kwargs
+
+    def form_valid(self, form):
+        self.object = form.save()
+
+        task_name = self.object.name
+        message = f"Skill \"{task_name}\" created successfully!"
         return HttpResponseRedirect(
             f"{reverse('buildmahome:successful_action')}?message={message}")
 

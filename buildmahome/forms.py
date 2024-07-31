@@ -1,10 +1,12 @@
+from bootstrap_datepicker_plus.widgets import DatePickerInput
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import CheckboxSelectMultiple
 
-from buildmahome.models import User, WorkTeam, Worker, Skill
+from buildmahome.models import User, WorkTeam, Worker, Skill, Task
 
+from datetime import date
 
 class PasswordsMixin(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -240,3 +242,27 @@ class ListSearchForm(forms.Form):
     def __init__(self, *args, placeholder="Search", **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["search_data"].widget.attrs["placeholder"] = placeholder
+
+
+class TaskCreateForm(forms.ModelForm):
+    class Meta:
+        model = Task
+        fields = ("name", "description", "work_team", "start_date")
+        widgets = {
+            'start_date': DatePickerInput(options={
+                "format": "YYYY-MM-DD",
+                "showClose": True,
+                "showClear": False,
+                "showTodayButton": True,
+                "minDate": date.today(),
+            }),
+        }
+
+    def __init__(self, *args, **kwargs):
+        work_team = kwargs.pop('work_team', None)
+        super().__init__(*args, **kwargs)
+        if work_team is not None:
+            self.fields['work_team'].queryset = WorkTeam.objects.filter(
+                pk=work_team.pk)
+            self.fields['work_team'].initial = work_team
+
