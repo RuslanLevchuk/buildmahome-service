@@ -323,6 +323,7 @@ class TaskCreateView(generic.CreateView):
         return kwargs
 
     def form_valid(self, form):
+        form.instance.customer = self.request.user
         self.object = form.save()
 
         task_name = self.object.name
