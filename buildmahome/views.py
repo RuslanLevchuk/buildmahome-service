@@ -316,11 +316,19 @@ class TaskCreateView(generic.CreateView):
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.work_team = None
         self.object = None
 
-    def get_form_kwargs(self):
-        kwargs = super().get_form_kwargs()
-        return kwargs
+    def get_initial(self):
+        initial = super().get_initial()
+        self.work_team = self.kwargs.get('pk')
+        if self.work_team:
+            try:
+                self.work_team = WorkTeam.objects.get(pk=self.work_team)
+                initial['work_team'] = self.work_team
+            except WorkTeam.DoesNotExist:
+                pass
+        return initial
 
     def form_valid(self, form):
         form.instance.customer = self.request.user
@@ -333,3 +341,13 @@ class TaskCreateView(generic.CreateView):
 
     def get_success_url(self):
         return reverse('buildmahome:successful_action')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        self.work_team = self.kwargs.get('pk')
+        if self.work_team:
+            try:
+                context['work_team'] = WorkTeam.objects.get(pk=self.work_team)
+            except WorkTeam.DoesNotExist:
+                context['work_team'] = None
+        return context

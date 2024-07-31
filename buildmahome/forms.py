@@ -257,12 +257,3 @@ class TaskCreateForm(forms.ModelForm):
                 "minDate": date.today(),
             }),
         }
-
-    def __init__(self, *args, **kwargs):
-        work_team = kwargs.pop('work_team', None)
-        super().__init__(*args, **kwargs)
-        if work_team is not None:
-            self.fields['work_team'].queryset = WorkTeam.objects.filter(
-                pk=work_team.pk)
-            self.fields['work_team'].initial = work_team
-
