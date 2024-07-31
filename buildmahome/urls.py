@@ -13,7 +13,8 @@ from .views import (
     SuccessfulActionView,
     WorkTeamUpdateView,
     SkillsListView,
-    SkillCreateView
+    SkillCreateView,
+    TaskCreateView
 )
 
 
@@ -33,6 +34,7 @@ urlpatterns = [
     path("workteams/<int:pk>/update/", WorkTeamUpdateView.as_view(), name="team_update"),
     path("skills/", SkillsListView.as_view(), name="skills_list"),
     path("skills/create", SkillCreateView.as_view(), name="skill_create"),
+    path("workteams/<int:pk>/add-order/", TaskCreateView.as_view(), name="team_order_create"),
 ]
 
 app_name = "buildmahome"
