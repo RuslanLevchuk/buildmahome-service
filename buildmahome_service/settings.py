@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'buildmahome',
     'widget_tweaks',
+    'bootstrap_datepicker_plus',
 ]
 
 MIDDLEWARE = [
