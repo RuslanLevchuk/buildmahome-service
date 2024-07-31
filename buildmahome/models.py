@@ -19,13 +19,6 @@ class User(AbstractUser):
         return self.username
 
 
-class Position(models.Model):
-    name = models.CharField(max_length=50, unique=True, blank=False, null=False)
-
-    def __str__(self) -> str:
-        return self.name
-
-
 class Skill(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField(blank=True)
@@ -46,11 +39,6 @@ class WorkTeam(models.Model):
 class Worker(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     about = models.TextField(blank=True)
-    position = models.ManyToManyField(
-        Position,
-        related_name='workers',
-        blank=True
-    )
     skills = models.ManyToManyField(Skill, related_name='workers', blank=True)
     is_active = models.BooleanField(default=True, blank=False, null=False)
     phone_number = models.CharField(max_length=12, unique=True)
@@ -94,7 +82,7 @@ class Task(models.Model):
     approved = models.BooleanField(default=False)
     creation_date = models.DateTimeField(auto_now_add=True)
     start_date = models.DateField()
-    end_date = models.DateField()
+    end_date = models.DateField(null=True, blank=True)
 
     def __str__(self) -> str:
         return self.name
