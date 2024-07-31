@@ -27732,3 +27732,22 @@ pre[class*="language-"] {
   align-items: center;
   min-width: 500px;
 }
+
+.datepicker table tr td.disabled,
+.datepicker table tr td.disabled:hover,
+.datepicker table tr td.disabled.active,
+.datepicker table tr td.disabled.active:hover {
+
+    color: #d0d0d0  ;
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+}
+
+.datepicker table tr td,
+.datepicker table tr td:hover,
+.datepicker table tr td.active,
+.datepicker table tr td.active:hover {
+
+    color: #444444;
+    cursor: not-allowed;
+}

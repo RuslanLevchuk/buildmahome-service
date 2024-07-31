@@ -31,6 +31,9 @@
               
                   <section class="py-9 position-relative">
                     <div class="container">
+                      
+                      {{ form.media }}  
+                      
                       <form method="post">
                         {% csrf_token %}
                         {% load widget_tweaks %}
@@ -39,6 +42,7 @@
                         <div class="row">
                           <!-- left side -->
                           <div class="col-md-6">
+                            
                             <div class="form-group">
                               <div class="input-group input-group-static mb-4">
                                 <label>{{ form.name.label }}</label>
@@ -47,12 +51,14 @@
                               <small>{{ form.name.errors }}</small>
                             </div>
                             
-
-                          </div>
-
-                          <!-- right side -->
-                          <div class="col-md-6">
-                          
+                            <div class="form-group">
+                              <div class="input-group input-group-static mb-4">
+                                <label>{{ form.work_team.label }}</label>
+                                {% render_field form.work_team class+="form-control" %}
+                              </div>
+                              <small>{{ form.work_team.errors }}</small>
+                            </div>
+                            
                             <div class="form-group">
                               <div class="input-group input-group-static mb-4">
                                 <label>{{ form.description.label }}</label>
@@ -60,6 +66,22 @@
                               </div>
                               <small>{{ form.description.errors }}</small>
                             </div>
+                            
+
+                          </div>
+
+                          <!-- right side -->
+                          <div class="col-md-6">
+                            
+                            <div class="form-group">
+                              <div class="input-group input-group-static mb-4">
+                                <label>{{ form.start_date.label }}</label>
+                                {% render_field form.start_date class+="form-control datepicker" %}
+                              </div>
+                              <small>{{ form.start_date.errors }}</small> 
+                            </div>
+                          
+                            
                           
                           </div>
                         
@@ -97,5 +119,6 @@
   {% block javascripts %}
   
   {% include 'buildmahome/includes/scripts_sections.html' %}
+
   
   {% endblock javascripts %}
