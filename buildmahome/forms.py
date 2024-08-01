@@ -1,12 +1,16 @@
+from datetime import date
+from warnings import filterwarnings
+
 from bootstrap_datepicker_plus.widgets import DatePickerInput
 from django import forms
-from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.forms import CheckboxSelectMultiple
 
 from buildmahome.models import User, WorkTeam, Worker, Skill, Task
 
-from datetime import date
+
+filterwarnings("ignore", category=UserWarning, module='pydantic')
+
 
 class PasswordsMixin(forms.ModelForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
@@ -245,15 +249,22 @@ class ListSearchForm(forms.Form):
 
 
 class TaskCreateForm(forms.ModelForm):
+
     class Meta:
         model = Task
-        fields = ("name", "description", "work_team", "start_date")
-        widgets = {
-            'start_date': DatePickerInput(options={
+        fields = ("name", "description", "start_date")
+
+    def __init__(self, *args, **kwargs):
+        disable_dates = kwargs.pop("disable_dates", False)
+
+        super().__init__(*args, **kwargs)
+        self.fields["start_date"] = forms.DateField(
+            widget=DatePickerInput(options={
                 "format": "YYYY-MM-DD",
                 "showClose": True,
                 "showClear": False,
                 "showTodayButton": True,
-                "minDate": date.today(),
-            }),
-        }
+                "minDate": str(date.today()),
+                "disabledDates": disable_dates,
+            })
+        )

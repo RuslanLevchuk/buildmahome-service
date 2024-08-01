@@ -1,3 +1,5 @@
+from datetime import date, timedelta
+
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -11,7 +13,7 @@ from bootstrap_datepicker_plus.widgets import DateTimePickerInput
 
 from buildmahome.forms import SignUpForm, UserUpdateForm, WorkTeamCreateFrom, \
     WorkTeamUpdateFrom, SkillCreateForm, ListSearchForm, TaskCreateForm
-from buildmahome.models import User, Worker, WorkTeam, Skill
+from buildmahome.models import User, Worker, WorkTeam, Skill, Task
 
 
 class IndexView(generic.TemplateView):
@@ -309,13 +311,13 @@ class SkillCreateView(generic.CreateView):
         return reverse('buildmahome:successful_action')
 
 
-
 class TaskCreateView(generic.CreateView):
     form_class = TaskCreateForm
     template_name = "buildmahome/task-create.html"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.work_team_pk = None
         self.work_team = None
         self.object = None
 
@@ -332,8 +334,11 @@ class TaskCreateView(generic.CreateView):
 
     def form_valid(self, form):
         form.instance.customer = self.request.user
+        form.instance.work_team = self.work_team
+        start_date = form.cleaned_data.get("start_date")
+        if start_date:
+            form.instance.end_date = start_date
         self.object = form.save()
-
         task_name = self.object.name
         message = f"Skill \"{task_name}\" created successfully!"
         return HttpResponseRedirect(
@@ -344,10 +349,28 @@ class TaskCreateView(generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        self.work_team = self.kwargs.get('pk')
+        self.work_team_pk = self.kwargs.get('pk')
         if self.work_team:
             try:
-                context['work_team'] = WorkTeam.objects.get(pk=self.work_team)
+                context['work_team'] = WorkTeam.objects.get(pk=self.work_team_pk)
             except WorkTeam.DoesNotExist:
                 context['work_team'] = None
         return context
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        work_team_pk = self.kwargs.get('pk')
+        if work_team_pk:
+            try:
+                work_team = WorkTeam.objects.get(pk=work_team_pk)
+                kwargs['initial'] = {'work_team': work_team}
+                tasks = Task.objects.filter(work_team=work_team)
+                disable_dates = []
+                for task in tasks:
+                    date_range = [task.start_date + timedelta(days=i) for i in range((task.end_date - task.start_date).days + 1)]
+                    disable_dates.extend(date_range)
+                kwargs['disable_dates'] = [str(disable_date.isoformat()) for disable_date in disable_dates]
+
+            except WorkTeam.DoesNotExist:
+                kwargs['disable_dates'] = []
+        return kwargs
