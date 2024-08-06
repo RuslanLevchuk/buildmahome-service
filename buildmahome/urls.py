@@ -36,7 +36,7 @@ urlpatterns = [
     path("skills/", SkillsListView.as_view(), name="skills_list"),
     path("skills/create", SkillCreateView.as_view(), name="skill_create"),
     path("workteams/<int:pk>/add-order/", TaskCreateView.as_view(), name="team_order_create"),
-    path("accounts/<int:pk>/orders/", OrderListView.as_view(), name="orders_list"),
+    path("orders/", OrderListView.as_view(), name="order_list"),
 ]
 
 app_name = "buildmahome"
