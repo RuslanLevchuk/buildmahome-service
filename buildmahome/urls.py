@@ -15,7 +15,8 @@ from .views import (
     SkillsListView,
     SkillCreateView,
     TaskCreateView,
-    OrderListView
+    OrderListView,
+    OrderDetailView,
 )
 
 
@@ -37,6 +38,7 @@ urlpatterns = [
     path("skills/create", SkillCreateView.as_view(), name="skill_create"),
     path("workteams/<int:pk>/add-order/", TaskCreateView.as_view(), name="team_order_create"),
     path("orders/", OrderListView.as_view(), name="order_list"),
+    path("orders/<int:pk>/", OrderDetailView.as_view(), name="order_detail"),
 ]
 
 app_name = "buildmahome"
