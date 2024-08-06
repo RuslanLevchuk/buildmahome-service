@@ -32,6 +32,10 @@
                           <h3 class="mb-0">{{ work_team.name }} team information</h3>
                           <div class="d-block">
                           
+                            
+                            <a href="{% url 'buildmahome:team_order_create' work_team.id %}">
+                              <button type="button" class="btn btn-sm btn-behance text-nowrap mb-0">Create order</button>
+                            </a>
                             {% if current_worker in work_team.workers.all %}
                               <a href="{% url 'buildmahome:team_update' work_team.id %}">
                                 <button type="button" class="btn btn-sm btn-outline-info text-nowrap mb-0">Update</button>
