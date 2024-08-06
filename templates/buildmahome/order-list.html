@@ -61,7 +61,7 @@
                       <div class="container">
                         <div class="row">
                             <h4 class="text-dark">
-                              {{ order.name }}
+                              <a href="{% url 'buildmahome:order_detail' order.id %}">{{ order.name }}</a>
                             </h4>
                           <div class="detail-block">
                             <b class="h6">Description</b>
