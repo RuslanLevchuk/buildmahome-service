@@ -421,3 +421,10 @@ class OrderListView(generic.ListView):
             initial={"search_data": self.search_query}
         )
         return context
+
+
+class OrderDetailView(generic.DetailView):
+    model = Task
+    context_object_name = "order"
+    template_name = "buildmahome/order-detail.html"
+
