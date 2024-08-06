@@ -3,7 +3,7 @@ from datetime import date, timedelta
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Prefetch
+from django.db.models import Prefetch, Q
 from django.http import request, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -383,5 +383,25 @@ class OrderListView(generic.ListView):
     context_object_name = "orders"
 
     def get_queryset(self):
+        now = timezone.now().date()
         orders = Task.objects.filter(customer=self.request.user)
+        filter_type = self.request.GET.get("type", None)
+        if filter_type:
+            if filter_type == "actual":
+                orders = orders.filter(Q(start_date__gte=now) and Q(approved=True))
+            if filter_type == "ended":
+                orders = orders.filter(end_date__lt=now)
+            if filter_type == "unapproved":
+                orders = orders.filter(approved=False)
+
         return orders
+
+    def get_context_data(self, **kwargs):
+        filter_type_params = ["actual", "ended", "unapproved", "all"]
+        context = super().get_context_data(**kwargs)
+        filter_type = self.request.GET.get("type", None)
+        if filter_type not in filter_type_params:
+            filter_type = "all"
+        context['filter_type'] = filter_type
+        context['orders'] = self.get_queryset()
+        return context
