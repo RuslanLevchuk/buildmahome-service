@@ -381,21 +381,33 @@ class OrderListView(generic.ListView):
     model = Task
     template_name = "buildmahome/order-list.html"
     context_object_name = "orders"
-    paginate_by = 1
+    paginate_by = 5
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.orders = None
+        self.search_query = None
 
     def get_queryset(self):
+        self.orders = Task.objects.filter(customer=self.request.user)
         now = timezone.now().date()
-        orders = Task.objects.filter(customer=self.request.user)
         filter_type = self.request.GET.get("type", None)
+        self.search_query = self.request.GET.get("search_data", None)
+
+        if self.search_query:
+            self.name_search = self.orders.filter(name__icontains=self.search_query)
+            self.description_search = self.orders.filter(description__icontains=self.search_query)
+            self.orders = self.name_search.union(self.description_search)
+
         if filter_type:
             if filter_type == "actual":
-                orders = orders.filter(Q(start_date__gte=now) and Q(approved=True))
+                self.orders = self.orders.filter(Q(start_date__gte=now) and Q(approved=True))
             if filter_type == "ended":
-                orders = orders.filter(end_date__lt=now)
+                self.orders = self.orders.filter(end_date__lt=now)
             if filter_type == "unapproved":
-                orders = orders.filter(approved=False)
+                self.orders = self.orders.filter(approved=False)
 
-        return orders
+        return self.orders
 
     def get_context_data(self, **kwargs):
         filter_type_params = ["actual", "ended", "unapproved", "all"]
@@ -404,4 +416,8 @@ class OrderListView(generic.ListView):
         if filter_type not in filter_type_params:
             filter_type = "all"
         context['filter_type'] = filter_type
+        context["search_form"] = ListSearchForm(
+            placeholder="Search...",
+            initial={"search_data": self.search_query}
+        )
         return context
