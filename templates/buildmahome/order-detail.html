@@ -29,38 +29,77 @@
                     <div class="row py-5">
                       <div class="col-lg-7 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mx-auto">
                         <div class="d-flex justify-content-between align-items-center mb-2">
-                          <h3 class="mb-0">{{ work_team.name }} team information</h3>
+                          <h3 class="mb-0">Order  #{{ order.id }} information</h3>
                           <div class="d-block">
                           
                             
-                            <a href="{% url 'buildmahome:team_order_create' work_team.id %}">
-                              <button type="button" class="btn btn-sm btn-behance text-nowrap mb-0">Delete oreder</button>
+                            <a href="#">
+                              <button type="button" class="btn btn-sm btn-danger text-nowrap mb-0">Delete order</button>
                             </a>
                           
                           </div>
                         </div>
-                        
-                        <p class="text-lg mb-0">
-                          {{ work_team.description }}
-                        </p>
-                        <p></p>
-                        <p class="text-lg mb-0 text-bold">
-                          ✆ {{ work_team.phone_number }}
-                        </p>
-                       <p></p>
+
+                        <div class="mt-3">
+                          <h6 class="font-weight-bolder mt-3">Name: {{ order.name }}</h6>
+                        </div>
+
+                         <div class="mt-3">
+                          <h6 class="font-weight-bolder mt-3">Description:</h6>
+                          <p class="pe-6">{{ order.description }}</p>
+                        </div>
+
+
+                        <div class="mt-3">
+                          <h6 class="font-weight-bolder mt-3">
+                            Work team:
+                            <span style="font-weight: 1;">
+                              <a href="{% url 'buildmahome:work_team_detail' order.work_team_id %}">{{ order.work_team.name }}
+                              </a>
+                            </span>
+                          </h6>
+                        </div>
+
+                        <div class="mt-3">
+                          <h6 class="font-weight-bolder mt-3">
+                            Approve status:
+                            <span style="font-weight: 1;">
+                              {% if order.approved %} approved {% else %} not yet approved {% endif %}
+                            </span>
+                          </h6>
+                        </div>
+
+                        <div class="t-3">
+                          <h6 class="font-weight-bolder mt-3">
+                            Start date:
+                            <span style="font-weight: 1;">
+                              {{ order.start_date }}
+                            </span>
+                          </h6>
+                        </div>
+
+                        <div class="mt-3">
+                          <h6 class="font-weight-bolder mt-3">
+                            End date:
+                            <span style="font-weight: 1;">
+                              {% if order.end_date %} {{ order.end_date }} {% else %} (not approved by work team) {% endif %}
+                            </span>
+                          </h6>
+                        </div>
+                      <br>
+
+                      <div class="mt-3">
+                          <h6 class="font-weight-bolder mt-3">
+                            Created:
+                            <span style="font-weight: 1;">
+                              {{ order.creation_date }}
+                            </span>
+                          </h6>
+                        </div>
+
+
                       
-                      <h6>Workers:</h6>
-                      <div class="items-grid">
-                        {% for worker in workers %}
-                          <a href="{% url 'buildmahome:profile' worker.user.id%}">{{ worker.user.username }}</a>
-                        {% endfor %}
-                      </div>
-                      
-                      <h6>Skills:</h6>
-                        <div class="items-grid">
-                          {% for skill in skills %}
-                            {{ skill.name }}
-                          {% endfor %}
+
                         </div>
                       
                     </div>
