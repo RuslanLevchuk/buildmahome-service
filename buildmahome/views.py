@@ -7,6 +7,7 @@ from django.db.models import Prefetch
 from django.http import request, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse, reverse_lazy
+from django.utils import timezone
 from django.views import generic
 
 from bootstrap_datepicker_plus.widgets import DateTimePickerInput
@@ -340,7 +341,7 @@ class TaskCreateView(generic.CreateView):
             form.instance.end_date = start_date
         self.object = form.save()
         task_name = self.object.name
-        message = f"Skill \"{task_name}\" created successfully!"
+        message = f"Order \"{task_name}\" created successfully!"
         return HttpResponseRedirect(
             f"{reverse('buildmahome:successful_action')}?message={message}")
 
@@ -374,3 +375,13 @@ class TaskCreateView(generic.CreateView):
             except WorkTeam.DoesNotExist:
                 kwargs['disable_dates'] = []
         return kwargs
+
+
+class OrderListView(generic.ListView):
+    model = Task
+    template_name = "buildmahome/order-list.html"
+    context_object_name = "orders"
+
+    def get_queryset(self):
+        orders = Task.objects.filter(customer=self.request.user)
+        return orders
