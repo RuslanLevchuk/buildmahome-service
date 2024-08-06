@@ -42,7 +42,8 @@
 
                     <div class="page-header py-6 py-md-5 mb-3 border-radius-xl" style="background-image: url('{% static 'img/shapes/waves-white.svg' %}')">
                       <span class="mask bg-gradient-faded-light"></span>
-                      <div class="container">
+                      <div class="container d-flex justify-content-between">
+
                         <div class="row">
                             <h4 class="text-dark">
                               <a href="{% url 'buildmahome:work_team_detail' team.id %}">{{ team.name }}</a>
@@ -54,10 +55,19 @@
                             <br><b>Workers:</b>
                             {% for worker in team.workers.all %}
                               <a href="{% url 'buildmahome:profile' worker.user.id %}">{{ worker.user.username }}</a> {% if not forloop.last %}, {% endif %}
+
+
                             {% endfor %}
                             
                           </div>
                         </div>
+
+                        <div class="d-flex m-lg-2">
+                        <a href="{% url 'buildmahome:team_order_create' team.id %}">
+                          <button type="button" class="btn btn-sm btn-behance text-nowrap mb-0">Create order</button>
+                        </a>
+                        </div>
+
                       </div>
                     </div>
 
