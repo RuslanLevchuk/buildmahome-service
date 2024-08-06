@@ -29,17 +29,15 @@
                   <div class="d-flex justify-content-between align-items-center mb-2">
                   
                     <div class="block-content-header">
-                      <h3>Skills</h3>
+                      <h3>My orders</h3>
                     </div>
                   
                     <div class="d-flex">
-                      
-                      {% include 'buildmahome/includes/search.html' %}
                     
                       {% if user.is_worker %}
                       <div class="d-flex m-lg-2">
-                        <a href="{% url 'buildmahome:skill_create' %}">
-                          <button type="button" class="btn btn-outline-info text-nowrap mb-0">Add skill</button>
+                        <a href="{% url 'buildmahome:work_team_list' %}">
+                          <button type="button" class="btn btn-outline-info text-nowrap mb-0">Add order</button>
                         </a>
                         </div>
                       {% endif %}
@@ -48,23 +46,22 @@
                 
                   <div class="row">
 
-                    {% for skill, teams in skills_page %}
+                    {% for order in orders %}
 
                     <div class="page-header py-6 py-md-5 mb-3 border-radius-xl" style="background-image: url('{% static 'img/shapes/waves-white.svg' %}')">
                       <span class="mask bg-gradient-faded-light"></span>
                       <div class="container">
                         <div class="row">
                             <h4 class="text-dark">
-                              {{ skill.name }}
+                              {{ order.name }}
                             </h4>
                           <div class="detail-block">
                             <b class="h6">Description</b>
-                            <br>{{ skill.description }}
-                            <br><b>Teams:</b>
-                            {% for team in teams %}
-                              <a href="{% url 'buildmahome:work_team_detail' team.id %}">{{ team.name }}</a> {% if not forloop.last %}, {% endif %}
-                            {% endfor %}
-                            
+                            <br>{{ order.description }}
+                            <br><b>Team:</b>
+                              <a href="{% url 'buildmahome:work_team_detail' order.work_team.id %}">{{ order.work_team.name }}</a>
+                            <br><b>Start/End dates:</b>
+                              {{ order.start_date }} / {% if order.approved %} {{ order.end_date }} {% else %} (Not approved by work team) {% endif %}
                           </div>
                         </div>
                       </div>
