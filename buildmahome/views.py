@@ -381,6 +381,7 @@ class OrderListView(generic.ListView):
     model = Task
     template_name = "buildmahome/order-list.html"
     context_object_name = "orders"
+    paginate_by = 1
 
     def get_queryset(self):
         now = timezone.now().date()
@@ -403,5 +404,4 @@ class OrderListView(generic.ListView):
         if filter_type not in filter_type_params:
             filter_type = "all"
         context['filter_type'] = filter_type
-        context['orders'] = self.get_queryset()
         return context
