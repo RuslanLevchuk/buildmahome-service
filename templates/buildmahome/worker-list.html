@@ -1,0 +1,98 @@
+{% extends 'buildmahome/layouts/base_background.html' %}
+{% load static %}
+
+{% block title %} Material Kit 2 by Creative Tim {% endblock title %}
+
+{% block body %} class="features-sections" {% endblock body %}
+
+{% block header %}
+
+{% include 'buildmahome/includes/navigation.html' %}
+
+{% endblock header %}
+
+
+{% block content %}
+
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-lg-12 mx-auto">
+        <div class="position-relative border-radius-xl overflow-hidden shadow-lg mb-7">
+          <br><br>
+          <div class="tab-content tab-space">
+            <div class="tab-pane active" id="preview-features-1">
+
+              <section class="py-9">
+
+                <div class="container">
+                
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="block-content-header">
+                    <h3>Workers</h3>
+                    </div>
+                    
+                    <div class="d-flex">
+                      {% include 'buildmahome/includes/search.html' %}
+                    </div>
+                  </div>
+                
+                  <div class="row">
+                    {% for worker in workers %}
+
+                    <div class="page-header py-6 py-md-5 mb-3 border-radius-xl" style="background-image: url('{% static 'img/shapes/waves-white.svg' %}')">
+                      <span class="mask bg-gradient-faded-light"></span>
+                      <div class="container">
+                        <div class="row">
+                            <h4 class="text-dark">
+                              {{ worker.user.first_name  }}
+                              <small style="font-weight: normal; font-size: 16px;">
+                                <a href="{% url 'buildmahome:profile' worker.user.id %}" class="text-primary icon-move-right">( {{ worker.user.username }} )
+                                  <i class="fas fa-arrow-right text-sm ms-1"></i>
+                                </a>
+                              </small>
+                            </h4>
+                          <div class="detail-block">
+                            <b>✆</b> {{ worker.phone_number }}
+                            {% if worker.team %}
+                              <br><b>Work team:</b> <a href="{% url 'buildmahome:work_team_detail'  worker.team.id %}">{{ worker.team.name }}</a>
+                            {% endif %}
+                            <br><b>Skills:</b>
+                            {% for skill in worker.skills.all %}
+                              {{ skill.name }} {% if not forloop.last %}, {% endif %}
+                    {% endfor %}
+                            
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {% endfor %}
+
+                  </div>
+                </div>
+
+              </section>
+
+
+              {% include 'buildmahome/includes/pagination.html' %}
+
+            
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock content %}
+
+  {% block footer %}
+  
+  {% include 'buildmahome/includes/footer_fullscreen.html' %}
+  
+  {% endblock footer %}
+
+  {% block javascripts %}
+  
+  {% include 'buildmahome/includes/scripts_sections.html' %}
+  
+  {% endblock javascripts %}

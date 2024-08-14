@@ -1,0 +1,105 @@
+{% extends 'buildmahome/layouts/base_background.html' %}
+{% load static %}
+
+{% block title %} Material Kit 2 by Creative Tim {% endblock title %}
+
+{% block body %} class="features-sections" {% endblock body %}
+
+{% block header %}
+
+{% include 'buildmahome/includes/navigation.html' %}
+
+{% endblock header %}
+
+
+{% block content %}
+
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-lg-12 mx-auto">
+        <div class="position-relative border-radius-xl overflow-hidden shadow-lg mb-7">
+          <br><br>
+          <div class="tab-content tab-space">
+            <div class="tab-pane active" id="preview-features-1">
+
+              <section class="py-9">
+
+                <div class="container">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <div class="block-content-header">
+                  Filter orders:
+                    <a href={% url 'buildmahome:order_list'%}>All</a> |
+                    <a href="?type=actual">Actual</a> | 
+                    <a href="?type=ended">Ended</a> | 
+                    <a href="?type=unapproved">Unapproved</a>
+                    
+                  </div>
+                </div>
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div class="block-content-header">
+                      <h3>My orders ({{ filter_type }})</h3>
+                    </div>
+                  
+                    <div class="d-flex">
+                    
+                      {% include 'buildmahome/includes/search.html' %}
+                      
+                      <div class="d-flex m-lg-2">
+                        <a href="{% url 'buildmahome:work_team_list' %}">
+                          <button type="button" class="btn btn-outline-info text-nowrap mb-0">Add order</button>
+                        </a>
+                        </div>
+                    </div>
+                  </div>
+                
+                  <div class="row">
+
+                    {% for order in orders %}
+
+                    <div class="page-header py-6 py-md-5 mb-3 border-radius-xl" style="background-image: url('{% static 'img/shapes/waves-white.svg' %}')">
+                      <span class="mask bg-gradient-faded-light"></span>
+                      <div class="container">
+                        <div class="row">
+                            <h4 class="text-dark">
+                              <a href="{% url 'buildmahome:order_detail' order.id %}">{{ order.name }}</a>
+                            </h4>
+                          <div class="detail-block">
+                            <b class="h6">Description</b>
+                            <br>{{ order.description }}
+                            <br><b>Team:</b>
+                              <a href="{% url 'buildmahome:work_team_detail' order.work_team.id %}">{{ order.work_team.name }}</a>
+                            <br><b>Start/End dates:</b>
+                              {{ order.start_date }} / {% if order.approved %} {{ order.end_date }} {% else %} (Not approved by work team) {% endif %}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {% endfor %}
+
+                  </div>
+                </div>
+
+              </section>
+            
+              {% include 'buildmahome/includes/pagination.html' %}
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock content %}
+
+  {% block footer %}
+  
+  {% include 'buildmahome/includes/footer_fullscreen.html' %}
+  
+  {% endblock footer %}
+
+  {% block javascripts %}
+  
+  {% include 'buildmahome/includes/scripts_sections.html' %}
+  
+  {% endblock javascripts %}
