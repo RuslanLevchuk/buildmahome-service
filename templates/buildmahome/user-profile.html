@@ -1,0 +1,124 @@
+{% extends 'buildmahome/layouts/base_background.html' %}
+{% load static %}
+
+{% block title %} Material Kit 2 by Creative Tim {% endblock title %}
+
+{% block body %} class="features-sections" {% endblock body %}
+
+{% block header %}
+
+{% include 'buildmahome/includes/navigation.html' %}
+
+{% endblock header %}
+
+
+{% block content %}
+
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-lg-12 mx-auto">
+        <div class="position-relative border-radius-xl overflow-hidden shadow-lg mb-7">
+          <br><br>
+          <div class="tab-content tab-space">
+            <div class="tab-pane active" id="preview-features-1">
+
+                <div class="block-content-header">
+                  <h3>User profile</h3>
+                </div>
+                
+                <section class="py-9">
+  
+                  <div class="container">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        
+                        <h3>{{ user.username}}</h3>
+                        {% if request.user.id == user.id %}
+                          {% if not user.first_name and not user.last_name %}
+                            You need to update your profile.
+                            <br>
+                            Some fields are empty.
+                          {% endif %}
+                        {% endif %}
+
+                      </div>
+                      
+                      <div class="col-lg-6 mt-lg-0 mt-5 ps-lg-0 ps-0">
+                        
+                        <table class="custom-table">
+                          <tbody>
+                            <tr>
+                              <td>Username</td>
+                              <td>{{ user.username }}</td>
+                            </tr>
+                            <tr>
+                              <td>First name</td>
+                              <td>{{ user.first_name }}</td>
+                            </tr>
+                            <tr>
+                              <td>Last name</td>
+                              <td>{{ user.last_name }}</td>
+                            </tr>
+                            <tr>
+                              <td>Email</td>
+                              <td>{{ user.email }}</td>
+                            </tr>
+                            
+                            {% if worker %}
+                              
+                              <tr>
+                                <td>Phone</td>
+                                <td>{{ worker.phone_number }}</td>
+                              </tr>
+                              <tr>
+                                <td>Team</td>
+                                <td>{{ worker.team.name }}</td>
+                              </tr>
+                              <tr>
+                                <td>Skills</td>
+                                <td>
+                                  {% if skills %}
+                                    {% for skill in skills %}
+                                      {{ skill.name }}
+                                    {% endfor %}
+                                  {% endif %}
+                                    </td>
+                              </tr>
+                            
+                            {% endif %}
+                            
+                          </tbody>
+                        </table>
+                      
+                      </div>
+                    </div>
+                  
+                    {% if request.user.id == user.id %}
+                    <a href="{% url 'buildmahome:update' user.id %}" class="text-primary icon-move-right">Update profile
+                      <i class="fas fa-arrow-right text-sm ms-1"></i>
+                    </a>
+                    {% endif %}
+                  
+                  </div>
+
+                </section>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endblock content %}
+
+  {% block footer %}
+  
+  {% include 'buildmahome/includes/footer_fullscreen.html' %}
+  
+  {% endblock footer %}
+
+  {% block javascripts %}
+  
+  {% include 'buildmahome/includes/scripts_sections.html' %}
+  
+  {% endblock javascripts %}
